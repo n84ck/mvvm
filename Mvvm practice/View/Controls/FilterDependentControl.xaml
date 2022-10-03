@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="Mvvm_practice.View.Controls.FilterDependentControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:convert="clr-namespace:Mvvm_practice.ViewModel.ValueConverters"
+             xmlns:local="clr-namespace:Mvvm_practice.View.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="300">
+    <StackPanel Orientation="Horizontal" Height="Auto" Width="Auto">
+        <StackPanel.Resources>
+            <Style TargetType="TextBox" x:Key="textBoxStyle">
+                <EventSetter Event="PreviewTextInput" Handler="TextBox_PreviewTextInput"></EventSetter>
+            </Style>
+        </StackPanel.Resources>
+        <ContentControl>
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding FilterInputType, RelativeSource={RelativeSource AncestorType={x:Type local:FilterDependentControl}}}" Value="Input">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <StackPanel Orientation="Horizontal" Height="Auto" Width="Auto">
+                                            <TextBox Width="50" Style="{DynamicResource textBoxStyle}" Text="{Binding FilterParameterValue}" />
+                                        </StackPanel>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding FilterInputType, RelativeSource={RelativeSource AncestorType={x:Type local:FilterDependentControl}}}" Value="ComboBox">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <ComboBox ItemsSource="{Binding SelectedFilter.SelectableNumbers}" x:Name="selectableValuesCombo" Width="70"  SelectedValue="{Binding FilterParameterValue}"/>
+                                        </StackPanel>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+    </StackPanel>
+</UserControl>
